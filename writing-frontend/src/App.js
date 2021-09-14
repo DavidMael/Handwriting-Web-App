@@ -97,15 +97,22 @@ function App () {
     document.body.appendChild(anchor);
     anchor.click();
   }
+
+  const processText = () => {
+    return "placeholder";
+  }
   
   return( 
     <div>
       <button onClick={newScreen} >
-        wipe
+        Wipe
       </button>
       <button onClick={saveImage}>
-        save
+        Save
       </button>
+      <p>
+        Input read as: {processText()}
+      </p>
       <canvas 
         onMouseDown={placePen}
         onMouseMove={completeBeziers}
