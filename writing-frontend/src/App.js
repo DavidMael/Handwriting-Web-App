@@ -84,11 +84,27 @@ function App () {
     context.fillStyle = '#a1236a';
     context.fillRect(0, 0, canvas.width, canvas.height);
   }
+
+  const saveImage = () => {
+
+    var anchor = document.createElement("a");
+    anchor.download = 'savedHandwriting.png';
+
+    const canvas = canvasRef.current;
+    var anchorHref = canvas.toDataURL("image/png");
+    anchor.href=anchorHref;
+
+    document.body.appendChild(anchor);
+    anchor.click();
+  }
   
   return( 
     <div>
       <button onClick={newScreen} >
         wipe
+      </button>
+      <button onClick={saveImage}>
+        save
       </button>
       <canvas 
         onMouseDown={placePen}
