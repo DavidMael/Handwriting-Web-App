@@ -16,7 +16,7 @@ function App () {
     const context = contextRef.current;
     const canvas = canvasRef.current;
 
-    context.fillStyle = '#a1236a';
+    context.fillStyle = '#ffffff';
     context.fillRect(0, 0, canvas.width, canvas.height);
   };
 
@@ -73,7 +73,7 @@ function App () {
 
     context.scale(2, 2);
 
-    context.fillStyle = '#1d44c2';
+    context.fillStyle = '#ffffff';
     context.fillRect(0, 0, canvas.width, canvas.height);
   }, [])
 
@@ -81,7 +81,7 @@ function App () {
     const context = contextRef.current;
     const canvas = canvasRef.current;
 
-    context.fillStyle = '#a1236a';
+    context.fillStyle = '#ffffff';
     context.fillRect(0, 0, canvas.width, canvas.height);
   }
 
