@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from 'react'
 
 function App () {
 
+  const [readText, setText] = useState("write using the mouse pointer in the space below");
+
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
 
@@ -75,6 +77,7 @@ function App () {
 
     context.fillStyle = '#ffffff';
     context.fillRect(0, 0, canvas.width, canvas.height);
+  
   }, [])
 
   const newScreen = () => {
@@ -99,7 +102,31 @@ function App () {
   }
 
   const processText = () => {
-    return "placeholder";
+
+    const canvas = canvasRef.current;
+    var imgURL = canvas.toDataURL();
+    console.log(imgURL);
+
+    fetch("/process", {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        pngBase64: imgURL,
+        upjson: 'sent text'
+      })
+    }).then( () => {
+
+      fetch("/process").then(getresponse => {
+        if(getresponse.status == 200){
+          return getresponse.json()
+        }
+      }).then( getData => setText( getData.reading ) )
+
+    })
+    
   }
   
   return( 
@@ -108,10 +135,13 @@ function App () {
         Wipe
       </button>
       <button onClick={saveImage}>
-        Save
+        Download
+      </button>
+      <button onClick={processText}>
+        Process writing
       </button>
       <p>
-        Input read as: {processText()}
+        Input read as: {readText}
       </p>
       <canvas 
         onMouseDown={placePen}
