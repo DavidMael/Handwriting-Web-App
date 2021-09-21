@@ -115,7 +115,7 @@ function App () {
       },
       body: JSON.stringify({
         pngBase64: imgURL,
-        upjson: 'sent text'
+        upjson: 'default text, character recognition currently being implemented'
       })
     }).then( () => {
 
