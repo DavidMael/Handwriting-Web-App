@@ -51,7 +51,7 @@ def textDetect(imagepath):
 
             lineTop = None
 
-    imageRGB.show()
+    #imageRGB.show()
 
     return linebounds
 
@@ -99,7 +99,7 @@ def charSegment(imagepath, linebounds):
                     resizedH = floor((linebounds[line][1] - linebounds[line][0])*28/(column - charLeft))
                 resized = cropped.resize(( resizedW , resizedH))
                 blank = Image.new('RGB', (28, 28), (255, 255, 255))
-                print(14 - floor(resizedW/2))
+                #print(14 - floor(resizedW/2))
                 blank.paste(resized, (14 - floor(resizedW/2), 14 - floor(resizedH/2) ))
                 try:
                     blank.save( ('character-images/'+str(imageCtr)+'.png'), 'png')
@@ -110,4 +110,4 @@ def charSegment(imagepath, linebounds):
 
                 charLeft = None
  
-    imageRGB.show()
+    #imageRGB.show()
