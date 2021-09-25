@@ -47,6 +47,7 @@ function App () {
       setBezierCnt(3);
     } else if (bezierCnt == 3){
       context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, offsetX, offsetY);
+      context.lineWidth = 4
       context.stroke();
       
       setBezierCnt(1);

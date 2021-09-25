@@ -55,6 +55,7 @@ def textDetect(imagepath):
 
     return linebounds
 
+#return the number of characters
 def charSegment(imagepath, linebounds):
 
     print(linebounds)
@@ -111,3 +112,5 @@ def charSegment(imagepath, linebounds):
                 charLeft = None
  
     #imageRGB.show()
+
+    return imageCtr
