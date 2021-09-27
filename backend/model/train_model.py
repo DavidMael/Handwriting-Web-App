@@ -2,7 +2,7 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 
 def decrement_label(example):
-    image = example["image"]
+    image = example["image"] / 255
     label = example["label"] - 1 
     return image, label
 
@@ -14,7 +14,7 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Flatten(input_shape=(28, 28, 1)),
     tf.keras.layers.Dense(250, activation="relu", use_bias=True),
     tf.keras.layers.Dense(250, activation="relu", use_bias=True),
-    tf.keras.layers.Dropout(0.1),
+    tf.keras.layers.Dropout(0.3),
     tf.keras.layers.Dense(26, activation="softmax")
 ])
 
@@ -22,7 +22,7 @@ model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=
 
 model.fit(train_data, epochs=50, validation_data=validation_data, verbose=1)
 
-print("final modle accuracy on training and validation sets:")
+print("final model accuracy on training and validation sets:")
 model.evaluate(train_data, verbose = 2)
 model.evaluate(validation_data, verbose = 2)
 
