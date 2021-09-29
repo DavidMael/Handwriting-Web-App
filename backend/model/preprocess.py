@@ -50,6 +50,7 @@ def charSegment(imagepath, linebounds):
 
     charLeft = None
 
+    counters = []
     imageCtr = 0
 
     for line in range(len(linebounds)):
@@ -103,4 +104,6 @@ def charSegment(imagepath, linebounds):
 
                 charLeft = None
 
-    return imageCtr
+        counters.append(imageCtr)
+
+    return counters
