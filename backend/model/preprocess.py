@@ -59,6 +59,11 @@ def charSegment(imagepath, linebounds):
 
     for line in range(len(linebounds)):
 
+        totalCharWidth = 0
+        avgCharWidth = 0
+        charsInLine = 0
+        columnsSinceLast = 0
+
         for column in range(borderWidth, width-borderWidth, 1):
 
             charDetected = False
@@ -69,44 +74,58 @@ def charSegment(imagepath, linebounds):
 
                     charDetected = True
 
+                    #whitespace treated same as linebreak
+                    if columnsSinceLast >= (avgCharWidth/2):
+                        counters.append(imageCtr)
+
+                    columnsSinceLast = 0
+                    
                     if charLeft == None:
                         charLeft = column
                         
-            if charDetected == False and charLeft != None:
+            if charDetected == False:
 
-                characterTop = None
-                characterBottom = None
-                for row in range (linebounds[line][0] , linebounds[line][1] , 1):
-                    blankRow = True
-                    for c in range (charLeft, column, 1):
-                        if image[c, row] != (255, 255, 255):
-                            blankRow = False
-                            if characterTop == None:
-                                characterTop = row
-                    if blankRow == True and characterBottom == None and characterTop != None:
-                        characterBottom = row
-                if characterBottom == None:
-                    characterBottom = linebounds[line][1]
-
+                if charLeft == None:
+                    columnsSinceLast += 1
                 
-                cropped = imagefile.crop((charLeft, characterTop, column, characterBottom))
-                if characterBottom - characterTop > column - charLeft:
-                    resizedW = floor((column - charLeft)*25/(characterBottom - characterTop))
-                    resizedH = 25
                 else:
-                    resizedW = 25
-                    resizedH = floor((characterBottom - characterTop)*25/(column - charLeft))
-                resized = cropped.resize(( resizedW , resizedH))
-                blank = Image.new('RGB', (28, 28), (255, 255, 255))
-                blank.paste(resized, (14 - floor(resizedW/2), 14 - floor(resizedH/2) ))
-                try:
-                    blank.save( ('character-images/'+str(imageCtr)+'.png'), 'png')
-                except AttributeError:
-                    print("error saving character image")
 
-                imageCtr = imageCtr + 1
+                    characterTop = None
+                    characterBottom = None
+                    for row in range (linebounds[line][0] , linebounds[line][1] , 1):
+                        blankRow = True
+                        for c in range (charLeft, column, 1):
+                            if image[c, row] != (255, 255, 255):
+                                blankRow = False
+                                if characterTop == None:
+                                    characterTop = row
+                        if blankRow == True and characterBottom == None and characterTop != None:
+                            characterBottom = row
+                    if characterBottom == None:
+                        characterBottom = linebounds[line][1]
 
-                charLeft = None
+                    
+                    cropped = imagefile.crop((charLeft, characterTop, column, characterBottom))
+                    if characterBottom - characterTop > column - charLeft:
+                        resizedW = floor((column - charLeft)*25/(characterBottom - characterTop))
+                        resizedH = 25
+                    else:
+                        resizedW = 25
+                        resizedH = floor((characterBottom - characterTop)*25/(column - charLeft))
+                    resized = cropped.resize(( resizedW , resizedH))
+                    blank = Image.new('RGB', (28, 28), (255, 255, 255))
+                    blank.paste(resized, (14 - floor(resizedW/2), 14 - floor(resizedH/2) ))
+                    try:
+                        blank.save( ('character-images/'+str(imageCtr)+'.png'), 'png')
+                    except AttributeError:
+                        print("error saving character image")
+
+                    imageCtr += 1
+                    charsInLine += 1
+                    totalCharWidth += column - charLeft
+                    avgCharWidth = totalCharWidth/charsInLine
+
+                    charLeft = None
 
         counters.append(imageCtr)
 
