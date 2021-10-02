@@ -14,14 +14,6 @@ function App () {
   const [cp2y, setCp2y] = useState(0);
   const [bezierCnt, setBezierCnt] = useState(0);
 
-  const ifClick = ({ nativeEvent }) => {
-    const context = contextRef.current;
-    const canvas = canvasRef.current;
-
-    context.fillStyle = '#ffffff';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-  };
-
   const placePen = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
     contextRef.current.beginPath();
@@ -66,18 +58,21 @@ function App () {
   useEffect(() => {
     const canvas = canvasRef.current
 
-    canvas.setAttribute('width', `${window.innerWidth * 2}`);
-    canvas.setAttribute('height', `${window.innerHeight * 2}`);
-    canvas.style.width = `${window.innerWidth}px`;
-    canvas.style.height = `${window.innerHeight}px`;
+    canvas.setAttribute("width", `${window.innerWidth * 2 * 0.95}`);
+    canvas.setAttribute("height", `${window.innerHeight * 2 * 0.85}`);
+    canvas.style.width = `${(window.innerWidth)*0.95}px`;
+    canvas.style.height = `${(window.innerHeight)*0.85}px`;
 
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
     contextRef.current = context;
 
-    context.scale(2, 2);
-
-    context.fillStyle = '#ffffff';
+    context.fillStyle = "#ffffff";
     context.fillRect(0, 0, canvas.width, canvas.height);
+    context.strokeStyle="#000000";
+    context.lineWidth = 5;
+    context.strokeRect(0, 0, canvas.width, canvas.height);
+
+    context.scale(2, 2);
   
   }, [])
 
@@ -85,14 +80,24 @@ function App () {
     const context = contextRef.current;
     const canvas = canvasRef.current;
 
-    context.fillStyle = '#ffffff';
+    canvas.setAttribute("width", `${window.innerWidth * 2 * 0.95}`);
+    canvas.setAttribute("height", `${window.innerHeight * 2 * 0.85}`);
+    canvas.style.width = `${(window.innerWidth)*0.95}px`;
+    canvas.style.height = `${(window.innerHeight)*0.85}px`;
+
+    context.fillStyle = "#ffffff";
     context.fillRect(0, 0, canvas.width, canvas.height);
+    context.strokeStyle="#000000";
+    context.lineWidth = 5;
+    context.strokeRect(0, 0, canvas.width, canvas.height);
+
+    context.scale(2, 2);
   }
 
   const saveImage = () => {
 
     var anchor = document.createElement("a");
-    anchor.download = 'savedHandwriting.png';
+    anchor.download = "savedHandwriting.png";
 
     const canvas = canvasRef.current;
     var anchorHref = canvas.toDataURL("image/png");
@@ -116,7 +121,7 @@ function App () {
       },
       body: JSON.stringify({
         pngBase64: imgURL,
-        upjson: 'default text, character recognition currently being implemented'
+        upjson: 'default text'
       })
     }).then( () => {
 

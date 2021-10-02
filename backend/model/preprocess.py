@@ -12,11 +12,13 @@ def textDetect(imagepath):
     lineTop = None
     linebounds = []
 
-    for scanline in range(height):
+    borderWidth = 5
+
+    for scanline in range(borderWidth, height-(borderWidth), 1):
 
         writingDetected = False
 
-        for pixel in range(width):
+        for pixel in range(borderWidth, width-borderWidth, 1):
 
             if image[pixel, scanline] != (255, 255, 255):
 
@@ -53,9 +55,11 @@ def charSegment(imagepath, linebounds):
     counters = []
     imageCtr = 0
 
+    borderWidth = 5
+
     for line in range(len(linebounds)):
 
-        for column in range(width):
+        for column in range(borderWidth, width-borderWidth, 1):
 
             charDetected = False
 
