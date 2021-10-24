@@ -1,5 +1,7 @@
 import tensorflow as tf
 import tensorflow_datasets as tfds
+import numpy
+import matplotlib.pyplot as plt
 
 def decrement_label(example):
     image = example["image"] / 255
@@ -10,30 +12,28 @@ train_data_raw, validation_data_raw = tfds.load("emnist/letters", split = ["trai
 train_data = train_data_raw.map(decrement_label)
 validation_data = validation_data_raw.map(decrement_label)
 
-model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.Conv2D(64, (5, 5), activation='relu', input_shape=(28, 28, 1)))
-model.add(tf.keras.layers.MaxPooling2D((2, 2)))
-model.add(tf.keras.layers.Conv2D(64, (4, 4), activation='relu'))
-model.add(tf.keras.layers.MaxPooling2D((2, 2)))
-model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
-model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(64, activation='relu'))
-model.add(tf.keras.layers.Dropout(0.5))
-model.add(tf.keras.layers.Dense(26))
+encoderModel = tf.keras.models.Sequential([
+    tf.keras.layers.Conv2D(64, (5, 5), activation='relu', input_shape=(28, 28, 1)),
+    tf.keras.layers.MaxPooling2D((2, 2)),
+    tf.keras.layers.Conv2D(64, (4, 4), activation='relu'),
+    tf.keras.layers.MaxPooling2D((2, 2)),
+    tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+    tf.keras.layers.Flatten(),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(26)
+])
+encoderModel.summary()
 
-model.summary()
-
-model.compile(optimizer='adam',
+encoderModel.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
-
-history = model.fit(train_data, epochs=10, 
+history = encoderModel.fit(train_data, epochs=10, 
                     validation_data=validation_data, verbose=1)
 
 print("final model accuracy on training and validation sets:")
-model.evaluate(train_data, verbose = 2)
-model.evaluate(validation_data, verbose = 2)
+encoderModel.evaluate(train_data, verbose = 2)
+encoderModel.evaluate(validation_data, verbose = 2)
 
-
-
+encoderModel.save("cnn_letter_model.h5")
